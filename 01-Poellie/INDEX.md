@@ -1,1 +1,0 @@
-# Poellie01 OSCP Notes\n\n## Categories\n- Cheatsheets\n- Checklists\n- Linux\n- Windows

@@ -1,9 +1,0 @@
-﻿{
-    "id":  "redteam-vault",
-    "spellcheck":  true,
-    "requestConflictResolution":  false,
-    "type":  "open",
-    "promptDelete":  true,
-    "showLineNumber":  true,
-    "lineWrapping":  true
-}

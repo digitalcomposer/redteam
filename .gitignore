@@ -1,36 +1,36 @@
-# Claude Code / Obsidian API configuration — contains secrets
+# ── Secrets / Claude config ──────────────────────────────────────────────────
 CLAUDE.md
 .claude/
 
-# Smart Connections plugin cache (may contain copies of CLAUDE.md)
+# ── Obsidian internals (ALL config, plugins, caches) ─────────────────────────
+.obsidian/
 .smart-env/
 
-# Obsidian workspace (machine-specific window layout)
-.obsidian/workspace.json
-.obsidian/workspace-mobile.json
+# ── Duplicate / imported third-party note collections ────────────────────────
+01-Poellie/
+02-Rai2en/
+02-Scanning-Enumeration/
+05-Persistence/
+06-Exploitation/
 
-# Obsidian plugin data that is local/generated
-.obsidian/plugins/obsidian-local-rest-api/
-.obsidian/plugins/smart-connections/
-.obsidian/plugins/smart-lookup/
-
-# Nested git repos (separate projects)
+# ── Nested git repos ─────────────────────────────────────────────────────────
 repo1/
 repo2/
 
-# Import/migration scripts (not part of the playbook)
+# ── Vault scaffolding files (not note content) ───────────────────────────────
+CREATED.txt
+
+# ── Import / migration scripts ───────────────────────────────────────────────
 import_oscp.py
 import_oscp.ps1
 import_oscp.sh
 optimize_vault.sh
 reorganize_oscp.sh
 
-# OS
+# ── OS / editor artifacts ─────────────────────────────────────────────────────
 .DS_Store
 Thumbs.db
 desktop.ini
-
-# Editor
 *.swp
 *.swo
 *~
