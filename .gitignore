@@ -1,0 +1,36 @@
+# Claude Code / Obsidian API configuration — contains secrets
+CLAUDE.md
+.claude/
+
+# Smart Connections plugin cache (may contain copies of CLAUDE.md)
+.smart-env/
+
+# Obsidian workspace (machine-specific window layout)
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+
+# Obsidian plugin data that is local/generated
+.obsidian/plugins/obsidian-local-rest-api/
+.obsidian/plugins/smart-connections/
+.obsidian/plugins/smart-lookup/
+
+# Nested git repos (separate projects)
+repo1/
+repo2/
+
+# Import/migration scripts (not part of the playbook)
+import_oscp.py
+import_oscp.ps1
+import_oscp.sh
+optimize_vault.sh
+reorganize_oscp.sh
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+*.swp
+*.swo
+*~
