@@ -1,5 +1,8 @@
 # Covering Tracks & Evasion
 
+> [!DANGER]
+> Reference material for explicitly authorized detection exercises. Routine engagements must preserve telemetry and remove only exact artifacts created by the test team. Broad deletion, timestamp changes, audit disabling, log clearing, and disk wiping require written approval for the exact system and a tested rollback plan.
+
 **Source:** OSCP & Penetration Testing Best Practices
 
 ## Quick Intro
@@ -526,6 +529,6 @@ psexec.exe -s "powershell -Command '$ram = [System.Runtime.InteropServices.Marsh
 
 ## Related Notes
 
-- [[05-Persistence]] → Maintain persistence before covering tracks
-- [[06-Exploitation]] → Clean up after exploitation
-- [[04-Privilege-Escalation]] → Remove privilege escalation artifacts
+- [[08-Persistence/INDEX]] → Track persistence artifacts for rollback
+- [[05-Exploitation/INDEX]] → Track exploitation artifacts
+- [[05-Post-Exploitation/INDEX]] → Track privilege-escalation artifacts

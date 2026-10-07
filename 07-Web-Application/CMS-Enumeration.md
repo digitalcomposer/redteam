@@ -185,5 +185,5 @@ http://<IP>/products.php?cat=1' UNION SELECT NULL--
 ## Related Notes
 
 - [[07-Web-Application/Web-Scanning]] → General web enumeration
-- [[07-Web-Application/LFI-RFI]] → Path traversal exploitation
-- [[06-Exploitation/SQL-Injection]] → SQL injection techniques
+- [[00-Quick-Reference/LFI]] → Path traversal exploitation
+- [[07-Web-Application/SQLi]] → SQL injection techniques

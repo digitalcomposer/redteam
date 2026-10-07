@@ -100,7 +100,7 @@ nmap -sn -v 192.168.0.0/24
 | --min-parallelism/max-parallelism <numprobes>                | 10; 1                | Probe parallelization                                                                       |
 | --scan-delay/--max-scan-delay <time>                         | 20ms; 2s; 4m; 5h     | Adjust delay between probes                                                                 |
 | --max-retries <tries>                                        | 3                    | Specify the maximum number of port scan probe retransmissions                               |
-| --min-rate <number>                                          | 100                  | Send packets no slower than <numberr> per second                                            |
+| --min-rate <number>                                          | 100                  | Send packets no slower than `<number>` per second                                            |
 | --max-rate <number>                                          | 100                  | Send packets no faster than <number> per second                                             |
 
 ## NSE Scripts

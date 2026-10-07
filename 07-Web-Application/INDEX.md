@@ -11,9 +11,9 @@
 - [[SQLi]] — Union/Blind/Time-based/Error-based, SQLMap, WAF bypass
 - [[XSS-SSRF-XXE-IDOR]] — XSS payloads, SSRF cloud metadata, XXE OOB, IDOR
 - [[File-Upload]] — Extension bypass, magic bytes, polyglot, webshell
-- [[06-Exploitation/LFI-RFI]] → LFI/RFI full playbook
-- [[06-Exploitation/Command-Injection]] → Command injection
-- [[06-Exploitation/ShellShock]] → ShellShock exploitation
+- [[00-Quick-Reference/LFI]] → LFI/RFI reference
+- [[05-Exploitation/Web-Apps]] → Command injection
+- [[05-Exploitation/Linux]] → ShellShock exploitation
 - [[00-Quick-Reference/SSTI Payloads]] → SSTI across engines
 
 ## Quick Refs

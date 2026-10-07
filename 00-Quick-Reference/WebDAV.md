@@ -1,5 +1,5 @@
 #### Install
-`pip3 install wsgidev` | `sudo apt install python-wsgidav-doc`
+`pipx install wsgidav` | `sudo apt install python3-wsgidav`
 
 #### Run server
 `/home/kali/.local/bin/wsgidav --host=0.0.0.0 --port=80 --auth=anonymous --root /home/kali/webdav/`

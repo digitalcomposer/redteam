@@ -63,4 +63,4 @@ hydra -l user -P /usr/share/wordlists/rockyou.txt $ip smtp
 ## Related Notes
 
 - [[03-Enumeration/DNS-Enumeration]] → Domain information gathering
-- [[06-Exploitation/Bruteforce-Authentication]] → Authentication attacks
+- [[03-Enumeration/Password-Cracking]] → Authentication attacks

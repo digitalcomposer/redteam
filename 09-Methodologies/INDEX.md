@@ -3,6 +3,7 @@
 **Tags:** #methodology #checklist #pentest
 
 ## Core
+- [[Engagement-Workflow]] — Approval gates, evidence handling, deconfliction, rollback, and reporting
 - [[Full Checklist]] — Complete 10-phase pentest checklist (pre-engagement → report)
 
 ## Phase Playbooks
@@ -16,7 +17,10 @@
 ```bash
 export TARGET="10.10.10.X"; export LHOST="10.10.14.X"
 export DOMAIN="corp.local"; export DC_IP="10.10.10.1"
-mkdir -p ~/engagements/$TARGET/{recon,scans,loot,exploits,screenshots}
-sudo nmap -sC -sV -oA scans/initial $TARGET &
-nmap -p- --min-rate 5000 -Pn -oA scans/allports $TARGET &
+export ENGAGEMENT_ID="customer-YYYYMMDD"
+mkdir -p "$ENGAGEMENT_ID"/{notes,evidence,scans,artifacts,report}
+cd "$ENGAGEMENT_ID"
+# Run only after scope and scan-rate approval:
+sudo nmap -sC -sV -oA scans/initial "$TARGET"
+nmap -p- --min-rate 300 -Pn -oA scans/allports "$TARGET"
 ```

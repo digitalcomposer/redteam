@@ -129,4 +129,4 @@ openssl enc -d -aes-256-cbc -in encrypted.bin -out decrypted.bin -k PASSWORD
 ## Related Notes
 
 - [[00-Quick-Reference/Python]] — Python for scripting analysis
-- [[06-Exploitation/Manual-Exploitation]] — Exploit after finding vulns
+- [[04-Vulnerability-Analysis/Exploit-Database]] — Validate and adapt exploit code

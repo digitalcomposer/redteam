@@ -1,5 +1,8 @@
 # Artifact Cleanup — Complete Guide
 
+> [!DANGER]
+> Reference material for explicitly authorized adversary-simulation objectives. Routine pentest cleanup must use an artifact register, exact object names, captured before-values, customer log preservation, and system-owner verification. Never run wildcard deletion or log-clearing examples as a standard cleanup procedure.
+
 **Tags:** #covering-tracks #forensics #opsec #cleanup
 **Phase:** End of Engagement → Removal of All Traces
 

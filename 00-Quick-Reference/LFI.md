@@ -1,7 +1,7 @@
 # LFI — Local File Inclusion Quick Reference
 
 **Tags:** #lfi #web #exploitation #php
-**Full Playbook:** [[06-Exploitation/LFI-RFI]]
+**Related Playbook:** [[05-Exploitation/Web-Apps]]
 
 ---
 
@@ -118,5 +118,5 @@ ffuf -u "http://$TARGET/FUZZ" -w /usr/share/seclists/Fuzzing/LFI/LFI-Jhaddix.txt
 
 ## Related Notes
 
-- [[06-Exploitation/LFI-RFI]] — Full LFI/RFI exploitation guide
+- [[05-Exploitation/Web-Apps]] — Web exploitation workflow
 - [[00-Quick-Reference/Reverse-Shells]] — Shells to deploy after RCE

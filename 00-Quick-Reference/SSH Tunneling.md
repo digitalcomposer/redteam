@@ -47,7 +47,7 @@ ssh -D 1080 -N -f user@<jump-host>
 echo "socks5 127.0.0.1 1080" >> /etc/proxychains4.conf
 proxychains nmap -sT -p 22,80,443 192.168.1.0/24
 proxychains curl http://192.168.1.100/
-proxychains netexec smb 192.168.1.0/24
+proxychains nxc smb 192.168.1.0/24
 
 # Use with curl
 curl --socks5 127.0.0.1:1080 http://192.168.1.100/

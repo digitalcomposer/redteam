@@ -11,6 +11,10 @@
 [ ] Rules of Engagement (RoE) agreed and signed
 [ ] Scope defined: IP ranges, domains, applications, exclusions
 [ ] Testing window established
+[ ] Tester source IPs, packet rate, concurrency, and excluded networks approved
+[ ] High-impact technique matrix completed
+[ ] Evidence encryption, transfer, retention, and deletion agreed
+[ ] Deconfliction channel and stop word tested
 [ ] Emergency contacts noted (abort condition)
 [ ] VPN / jump host configured
 [ ] Lab environment set up (Obsidian, note-taking, screenshots)
@@ -47,25 +51,28 @@
 [ ] Host discovery:
     nmap -sn 10.10.10.0/24 --open -oG alive_hosts.txt
 
-[ ] Full TCP port scan:
-    nmap -p- --min-rate 5000 -Pn -oA tcp_all $TARGET
+[ ] Full TCP port scan at the approved rate:
+    SCAN_RATE=300
+    nmap -p- --min-rate "$SCAN_RATE" --max-retries 2 -Pn -oA tcp_all "$TARGET"
 
 [ ] Top ports with service detection:
-    nmap -sC -sV -p TOP_PORTS -oA svc_scan $TARGET
+    TOP_PORTS="22,80,443,445,3389,5985"
+    nmap -sC -sV -p "$TOP_PORTS" -oA svc_scan "$TARGET"
 
 [ ] UDP scan (top 20):
-    nmap -sU --top-ports 20 -oA udp_scan $TARGET
+    sudo nmap -Pn -sU --top-ports 20 -oA udp_scan "$TARGET"
 
 [ ] OS detection:
-    nmap -O $TARGET
+    sudo nmap -Pn -O "$TARGET"
 
 [ ] NSE scripts for detected services:
-    nmap --script vuln -p OPEN_PORTS $TARGET
-    nmap --script smb-vuln* -p 445 $TARGET
-    nmap --script http-* -p 80,443,8080 $TARGET
+    OPEN_PORTS="80,443,445"
+    nmap -Pn --script vuln -p "$OPEN_PORTS" "$TARGET"
+    nmap -Pn --script 'smb-vuln*' -p 445 "$TARGET"
+    nmap -Pn --script 'http-* and not http-brute' -p 80,443,8080 "$TARGET"
 
 [ ] Netcat banner grab key ports:
-    nc -nv $TARGET 21/22/25/110/143
+    for port in 21 22 25 110 143; do nc -nv -w 3 "$TARGET" "$port"; done
 ```
 
 ---
@@ -100,13 +107,13 @@
 ### SMB (139/445)
 
 ```
-[ ] netexec smb $TARGET — OS, signing, version
+[ ] nxc smb "$TARGET" — OS, signing, version
 [ ] Null/anonymous session: smbclient -N -L //$TARGET
-[ ] Guest access: netexec smb $TARGET -u guest -p ''
-[ ] Shares enumeration: netexec smb $TARGET --shares
+[ ] Guest access: nxc smb "$TARGET" -u guest -p ''
+[ ] Shares enumeration: nxc smb "$TARGET" -u "$USER" -p "$PASS" --shares
 [ ] File enumeration: manspider, smbclient
 [ ] User enumeration: lookupsid, samrdump
-[ ] Vuln check: nmap --script smb-vuln* -p 445 $TARGET
+[ ] Vuln check: nmap -Pn --script 'smb-vuln*' -p 445 "$TARGET"
 [ ] EternalBlue check (MS17-010): nmap --script smb-vuln-ms17-010
 [ ] PrintNightmare check: nmap -p 445 --script smb-vuln-ms10-061
 ```
@@ -253,7 +260,7 @@
 [ ] Map internal network from compromised host
 [ ] Identify targets: ping sweep, port scan via proxychains/ligolo
 [ ] Spray found credentials / hashes across network
-[ ] netexec smb 10.10.10.0/24 -u users.txt -p passwords.txt
+[ ] nxc smb "$SUBNET" -u users.txt -p approved-password-candidates.txt --no-bruteforce
 [ ] Pass-the-Hash: impacket-wmiexec, evil-winrm
 [ ] Pass-the-Ticket: rubeus dump + inject
 [ ] Set up pivot: chisel, ligolo-ng, ssh tunnel
@@ -305,6 +312,9 @@
 ---
 
 ## Phase 10 — Covering Tracks
+
+> [!WARNING]
+> Default closeout preserves customer logs and removes only exact artifacts created by the test team. Log clearing, timestamp manipulation, audit changes, and broad deletion require a separately approved detection objective and customer-led rollback verification.
 
 ```
 [ ] Remove added users
@@ -361,10 +371,13 @@ export TARGET="10.10.10.X"
 export LHOST="10.10.14.X"
 export DOMAIN="corp.local"
 export DC_IP="10.10.10.1"
-mkdir -p ~/engagements/$TARGET/{recon,scans,exploits,loot,screenshots}
-cd ~/engagements/$TARGET
-sudo nmap -sC -sV -oA scans/initial $TARGET &
-nmap -p- --min-rate 5000 -Pn -oA scans/allports $TARGET &
+export ENGAGEMENT_ID="customer-YYYYMMDD"
+export SCAN_RATE="300"
+umask 077
+mkdir -p "$ENGAGEMENT_ID"/{notes,evidence,scans,artifacts,loot,report}
+cd "$ENGAGEMENT_ID"
+nmap -Pn -sC -sV -oA scans/initial "$TARGET"
+nmap -Pn -p- --min-rate "$SCAN_RATE" --max-retries 2 -oA scans/allports "$TARGET"
 ```
 
 ---

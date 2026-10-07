@@ -98,4 +98,4 @@ python3 dvcs-ripper/rip-hg.py -u http://$TARGET/.hg/
 ## Related Notes
 
 - [[01-Reconnaissance/Passive-OSINT]] — GitHub secret hunting
-- [[07-Web-Application/LFI-RFI]] — File inclusion after source read
+- [[00-Quick-Reference/LFI]] — File inclusion after source read

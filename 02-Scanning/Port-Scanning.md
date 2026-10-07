@@ -7,16 +7,33 @@ tags: [scanning, nmap, ports, discovery]
 ## Quick Workflow
 
 ```bash
-# 1. Fast all-ports TCP
-nmap -p- --min-rate 10000 -oN allports.txt <target>
+# Required variables
+export TARGET="192.0.2.10"
+export SCAN_RATE="300"       # Raise only to the RoE-approved rate
+mkdir -p scans
+
+# 1. All-port TCP discovery
+nmap -Pn -p- --min-rate "$SCAN_RATE" --max-retries 2 \
+  -oA scans/tcp-all "$TARGET"
 
 # 2. Detailed scan on open ports
-ports=$(grep "^[0-9]" allports.txt | cut -d'/' -f1 | tr '\n' ',' | sed 's/,$//')
-nmap -sCV -p "$ports" -oN detailed.txt <target>
+ports=$(awk -F/ '/^[0-9]+\/open\// {print $1}' scans/tcp-all.gnmap | paste -sd, -)
+test -n "$ports" && nmap -Pn -sV -sC -p "$ports" \
+  -oA scans/tcp-services "$TARGET"
 
-# 3. UDP top ports (slow — run in background)
-nmap -sU --top-ports 100 -oN udp.txt <target>
+# 3. UDP top ports
+sudo nmap -Pn -sU --top-ports 100 --version-intensity 2 \
+  -oA scans/udp-top100 "$TARGET"
 ```
+
+## Rate profiles
+
+| Profile | Starting point | Use |
+|---|---:|---|
+| Conservative | `--min-rate 100 --max-retries 3` | Fragile, remote, or production targets |
+| Standard | `--min-rate 300 --max-retries 2` | Normal internal assessment baseline |
+| Fast | `--min-rate 2000 --max-retries 1` | Stable lab or explicitly approved segment |
+| Very fast | `--min-rate 10000` or Masscan | Controlled lab only; validate packet loss and monitoring impact |
 
 ## Nmap Flag Reference
 
@@ -38,7 +55,7 @@ nmap -O <target>               # OS detection
 # Speed / aggression
 nmap -T1 <target>              # Sneaky (slow)
 nmap -T4 <target>              # Aggressive (fast)
-nmap --min-rate 5000 <target>  # Raw rate control
+nmap --min-rate "$SCAN_RATE" "$TARGET"  # Explicit approved rate
 
 # Output
 nmap -oN output.txt            # Normal
@@ -50,12 +67,13 @@ nmap -oA output                # All formats
 ## Masscan (Fastest Full-Port)
 
 ```bash
-# All ports at 100k pps (adjust for network)
-masscan -p1-65535 <target> --rate 100000 -oG masscan.txt
-masscan -p1-65535 <subnet>/24 --rate 50000 -e eth0 -oG masscan.txt
+# Begin with an approved rate; increase only after loss/impact checks.
+sudo masscan "$TARGET" -p1-65535 --rate "$SCAN_RATE" -oG scans/masscan.gnmap
+sudo masscan "$SUBNET" -p1-65535 --rate "$SCAN_RATE" -e "$INTERFACE" -oG scans/masscan-subnet.gnmap
 
 # Parse masscan output for nmap follow-up
-grep "open" masscan.txt | awk '{print $4}' | cut -d'/' -f1 | sort -un | tr '\n' ',' | sed 's/,$//'
+awk '/Ports:/{for(i=1;i<=NF;i++) if($i ~ /^[0-9]+\/open\//){split($i,p,"/"); print p[1]}}' \
+  scans/masscan.gnmap | sort -un | paste -sd, -
 ```
 
 ## Rustscan (Fast + Nmap)
@@ -80,7 +98,7 @@ rustscan -a <subnet>/24 --ulimit 5000
 | 53 | DNS | `dig @<target> <domain> AXFR` |
 | 80/443 | HTTP/S | `whatweb`, `ffuf`, `nikto` |
 | 110/995 | POP3 | `nc <target> 110` |
-| 139/445 | SMB | `smbclient`, `netexec smb` |
+| 139/445 | SMB | `smbclient`, `nxc smb` |
 | 389/636 | LDAP | `ldapsearch` |
 | 1433 | MSSQL | `impacket-mssqlclient` |
 | 1521 | Oracle | `odat all -s <target>` |

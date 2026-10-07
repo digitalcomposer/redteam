@@ -141,5 +141,5 @@ mssqlbrute.py <IP> -u wordlist.txt -p wordlist.txt
 
 - [[03-Enumeration/MySQL-Enumeration]] → MySQL enumeration
 - [[03-Enumeration/Oracle-Enumeration]] → Oracle enumeration
-- [[06-Exploitation/Bruteforce-Authentication]] → Credential attacks
+- [[03-Enumeration/Password-Cracking]] → Credential attacks
 - [[05-Post-Exploitation]] → Post-shell enumeration

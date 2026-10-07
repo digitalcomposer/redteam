@@ -8,39 +8,41 @@
 
 ```bash
 # Quick service scan
-nmap -sV -sC -oA quick $TARGET
+nmap -Pn -sV -sC -oA scans/quick "$TARGET"
 
 # All ports + service detection
-nmap -p- --min-rate 5000 -Pn -oA allports $TARGET
+nmap -p- --min-rate "$SCAN_RATE" --max-retries 2 -Pn -oA scans/allports "$TARGET"
 
 # Full deep scan on discovered open ports
-nmap -sC -sV -p 80,443,8080,22 -oA deep $TARGET
+nmap -Pn -sC -sV -p 22,80,443,8080 -oA scans/deep "$TARGET"
 
 # UDP top 20
-nmap -sU --top-ports 20 -oA udp $TARGET
+sudo nmap -Pn -sU --top-ports 20 -oA scans/udp "$TARGET"
 
 # Aggressive (slow but comprehensive)
-nmap -A -p- -T4 $TARGET
+nmap -Pn -A -p- -T4 --min-rate "$SCAN_RATE" "$TARGET"
 
 # Stealth SYN scan
-nmap -sS -p- --min-rate 5000 -Pn $TARGET
+sudo nmap -sS -p- --min-rate "$SCAN_RATE" -Pn "$TARGET"
 
 # Vulnerability scripts
-nmap --script vuln $TARGET
-nmap --script "safe or default" $TARGET
+nmap -Pn --script vuln "$TARGET"
+nmap -Pn --script "safe or default" "$TARGET"
 ```
 
 ## Masscan (High-Speed)
 
 ```bash
-# All ports — extremely fast
-masscan $TARGET -p0-65535 --rate 10000 -oG masscan.txt
+# All TCP ports at the approved rate
+sudo masscan "$TARGET" -p1-65535 --rate "$SCAN_RATE" -oG scans/masscan.gnmap
 
-# Specific ports at max speed
-masscan $SUBNET/24 -p 22,80,443,445,3389,8080 --rate 100000
+# Specific ports across the approved subnet
+sudo masscan "$SUBNET" -p22,80,443,445,3389,8080 --rate "$SCAN_RATE" -oG scans/masscan-services.gnmap
 
 # Combine with nmap (masscan finds ports, nmap does service detection)
-masscan $TARGET -p0-65535 --rate 10000 | grep open | awk '{print $4}' | cut -d/ -f1 | tr '\n' ',' | xargs -I{} nmap -sV -p {} $TARGET
+ports=$(awk '/Ports:/{for(i=1;i<=NF;i++) if($i ~ /^[0-9]+\/open\//){split($i,p,"/"); print p[1]}}' \
+  scans/masscan.gnmap | sort -un | paste -sd, -)
+test -n "$ports" && nmap -Pn -sV -sC -p "$ports" "$TARGET"
 ```
 
 ## RustScan (Fast + Nmap Integration)

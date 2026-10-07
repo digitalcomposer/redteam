@@ -1,5 +1,8 @@
 # Windows Log Removal & Anti-Forensics
 
+> [!DANGER]
+> Do not use log removal as routine pentest cleanup. Preserve customer telemetry and remove only registered operator artifacts. These commands require an explicitly authorized detection objective, exact host scope, customer coordination, evidence backup, and rollback plan.
+
 **Tags:** #covering-tracks #windows #logs #opsec
 **Phase:** Post-Exploitation → Cleanup
 

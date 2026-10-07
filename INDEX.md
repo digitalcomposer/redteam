@@ -1,7 +1,7 @@
 # Penetration Testing Vault
 
-**Professional kill-chain resource.**
-Study flow: `01-Reconnaissance` → `09-Covering-Tracks`
+**Professional operator reference.**
+Engagement flow: [[09-Methodologies/Engagement-Workflow]] → reconnaissance → validation → reporting → controlled cleanup.
 
 ---
 
@@ -11,7 +11,7 @@ Study flow: `01-Reconnaissance` → `09-Covering-Tracks`
 |-------|---------|-------|
 | 1 | [[01-Reconnaissance/Passive-OSINT]] | OSINT, target profiling, subdomains |
 | 1 | [[01-Reconnaissance/Active-Reconnaissance]] | Port scanning, service enumeration |
-| 2 | [[02-Scanning-Enumeration/Complete-OSCP-Notes]] | Full scan workflow |
+| 2 | [[02-Scanning/INDEX]] | Port scanning and service discovery |
 | 3 | [[03-Vulnerability-Analysis/Gabb4r-Reference]] | CVE lookup, exploit research |
 | 4 | [[04-Exploitation/Linux/Linux]] | Linux initial access |
 | 4 | [[04-Exploitation/Windows/Windows]] | Windows initial access |
@@ -23,13 +23,18 @@ Study flow: `01-Reconnaissance` → `09-Covering-Tracks`
 | 7 | [[07-Web-Application/XSS-SSRF-XXE-IDOR]] | XSS, SSRF, XXE, IDOR |
 | 7 | [[07-Web-Application/File-Upload]] | File upload exploitation |
 | 8 | [[08-Active-Directory/INDEX]] | Full AD attack playbook |
-| 9 | [[09-Covering-Tracks/Covering-Tracks]] | Log removal, artifact cleanup |
+| 9 | [[09-Covering-Tracks/INDEX]] | Authorized restoration and artifact cleanup |
+| 10 | [[10-Reporting/INDEX]] | Findings, evidence, closeout, and retest |
 
 ---
 
 ## Methodology
 
 [[09-Methodologies/Full Checklist]] — Ultimate pentest checklist (phases 0–10)
+
+[[09-Methodologies/Engagement-Workflow]] — Approval gates, evidence discipline, deconfliction, cleanup, and reporting
+
+[[00-Quick-Reference/Operator-Setup]] — Standard variables, workspace, transcripts, and tool provenance
 
 ---
 

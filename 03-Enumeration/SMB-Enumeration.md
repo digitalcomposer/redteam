@@ -9,7 +9,7 @@ tags: [enumeration, smb, samba, shares, rpc]
 ```bash
 nmap -sV -p 139,445 <target>
 nmap --script smb-os-discovery,smb-security-mode,smb2-security-mode -p 445 <target>
-netexec smb <target>
+nxc smb <target>
 ```
 
 ## Anonymous / Null Session
@@ -18,8 +18,8 @@ netexec smb <target>
 # List shares (null auth)
 smbclient -L //<target> -N
 smbmap -H <target>
-netexec smb <target> -u '' -p '' --shares
-netexec smb <target> -u 'guest' -p '' --shares
+nxc smb <target> -u '' -p '' --shares
+nxc smb <target> -u 'guest' -p '' --shares
 
 # Connect to share
 smbclient //<target>/<share> -N
@@ -33,19 +33,19 @@ smbclient //<target>/<share> -N -c "prompt off; recurse on; mget *"
 
 ```bash
 # Shares
-netexec smb <target> -u <user> -p <pass> --shares
+nxc smb <target> -u <user> -p <pass> --shares
 smbmap -H <target> -u <user> -p <pass> -R    # recursive listing
 
 # Users
-netexec smb <target> -u <user> -p <pass> --users
-netexec smb <target> -u <user> -p <pass> --groups
+nxc smb <target> -u <user> -p <pass> --users
+nxc smb <target> -u <user> -p <pass> --groups
 
 # Password policy (for spray tuning)
-netexec smb <target> -u <user> -p <pass> --pass-pol
+nxc smb <target> -u <user> -p <pass> --pass-pol
 
 # RID cycling (user enum without creds)
 impacket-lookupsid <domain>/guest:@<target> -no-pass
-netexec smb <target> -u '' -p '' --rid-brute 10000
+nxc smb <target> -u '' -p '' --rid-brute 10000
 ```
 
 ## RPC Enumeration
@@ -78,7 +78,7 @@ nmap --script "smb-vuln*" -p 445 <target>
 
 # SMB signing (relay attack prerequisite)
 nmap --script smb-security-mode -p 445 <target> | grep "message_signing"
-netexec smb <subnet>/24 --gen-relay-list no_signing.txt
+nxc smb <subnet>/24 --gen-relay-list no_signing.txt
 ```
 
 ## Mount SMB Share
@@ -95,9 +95,9 @@ sudo umount /mnt/smb
 ## Credential Spraying
 
 ```bash
-netexec smb <target> -u users.txt -p <pass> --continue-on-success
-netexec smb <target> -u <user> -p passwords.txt --continue-on-success
-netexec smb <subnet>/24 -u <user> -p <pass> --continue-on-success
+nxc smb <target> -u users.txt -p <pass> --continue-on-success
+nxc smb <target> -u <user> -p passwords.txt --continue-on-success
+nxc smb <subnet>/24 -u <user> -p <pass> --continue-on-success
 ```
 
 ## Useful SMB Files to Hunt

